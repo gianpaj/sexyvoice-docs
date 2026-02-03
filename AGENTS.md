@@ -1,45 +1,36 @@
----
-title: "Claude Code setup"
-description: "Configure Claude Code for your documentation workflow"
-icon: "asterisk"
----
+# SexyVoice.ai Documentation
 
-Claude Code is Anthropic's official CLI tool. This guide will help you set up Claude Code to help you write and maintain your documentation.
+Documentation for [SexyVoice.ai](https://sexyvoice.ai) - AI-powered voice generation platform.
 
-## Prerequisites
+**Live docs:** [docs.sexyvoice.ai](https://docs.sexyvoice.ai)
 
-- Active Claude subscription (Pro, Max, or API access)
+## Product Overview
 
-## Setup
+SexyVoice.ai has three main features:
 
-1. Install Claude Code globally:
+1. **Generate (Text-to-Speech)** - Convert text into natural-sounding speech
+2. **Voice Cloning** - Create custom voice models from audio samples
+3. **Voice Call (Real-time Voice)** - Live voice interaction capabilities
 
-  ```bash
-  npm install -g @anthropic-ai/claude-code
-```
+## Source Code Reference
 
-2. Navigate to your docs directory.
-3. (Optional) Add the `CLAUDE.md` file below to your project.
-4. Run `claude` to start.
+- Web app: `/Users/gianpaj/github/gianpaj/sexyvoice.ai`
+- Docs: `/Users/gianpaj/github/gianpaj/sexyvoice-docs`
 
-## Create `CLAUDE.md`
+## Working Relationship
 
-Create a `CLAUDE.md` file at the root of your documentation repository to train Claude Code on your specific documentation standards:
-
-````markdown
-# Mintlify documentation
-
-## Working relationship
 - You can push back on ideas-this can lead to better documentation. Cite sources and explain your reasoning when you do so
 - ALWAYS ask for clarification rather than making assumptions
 - NEVER lie, guess, or make up information
 
-## Project context
+## Project Context
+
 - Format: MDX files with YAML frontmatter
 - Config: docs.json for navigation, theme, settings
 - Components: Mintlify components
 
-## Content strategy
+## Content Strategy
+
 - Document just enough for user success - not too much, not too little
 - Prioritize accuracy and usability of information
 - Make content evergreen when possible
@@ -47,11 +38,13 @@ Create a `CLAUDE.md` file at the root of your documentation repository to train 
 - Check existing patterns for consistency
 - Start by making the smallest reasonable changes
 
-## Frontmatter requirements for pages
+## Frontmatter Requirements For Pages
+
 - title: Clear, descriptive page title
 - description: Concise summary for SEO/navigation
 
-## Writing standards
+## Writing Standards
+
 - Second-person voice ("you")
 - Prerequisites at start of procedural content
 - Test all code examples before publishing
@@ -61,16 +54,17 @@ Create a `CLAUDE.md` file at the root of your documentation repository to train 
 - Alt text on all images
 - Relative paths for internal links
 
-## Git workflow
-- NEVER use --no-verify when committing
+## Git Workflow
+
+- NEVER use `--no-verify` when committing
 - Ask how to handle uncommitted changes before starting
 - Create a new branch when no clear branch exists for changes
 - Commit frequently throughout development
 - NEVER skip or disable pre-commit hooks
 
-## Do not
+## Do Not
+
 - Skip frontmatter on any MDX file
 - Use absolute URLs for internal links
 - Include untested code examples
 - Make assumptions - always ask for clarification
-````

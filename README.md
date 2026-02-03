@@ -1,16 +1,8 @@
-# Mintlify Starter Kit
+# SexyVoice.ai Documentation
 
-Use the starter kit to get your docs deployed and ready to customize.
+Documentation for [SexyVoice.ai](https://sexyvoice.ai) - AI-powered voice generation platform.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
-
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
-
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+**Live docs:** [docs.sexyvoice.ai](https://docs.sexyvoice.ai)
 
 ## Development
 
