@@ -1,94 +1,210 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "SexyVoice API",
+    "description": "API for text-to-speech generation and metadata discovery.",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://sexyvoice.ai",
+      "description": "Production"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development"
     }
   ],
   "security": [
     {
-      "bearerAuth": []
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Speech",
+      "description": "Generate speech audio"
+    },
+    {
+      "name": "Metadata",
+      "description": "Discover available voices, models, and API schema"
+    },
+    {
+      "name": "Billing",
+      "description": "Retrieve account balance and latest billing transaction"
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+    "/api/v1/speech": {
+      "post": {
+        "tags": ["Speech"],
+        "summary": "Generate speech audio",
+        "description": "Generates speech from text using the requested model and voice.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoiceGenerationRequest"
+              },
+              "examples": {
+                "basic": {
+                  "summary": "Basic generation",
+                  "value": {
+                    "model": "gpro",
+                    "input": "Hello, world!",
+                    "voice": "poe"
+                  }
+                },
+                "with_style_and_seed": {
+                  "summary": "Generation with style and seed",
+                  "value": {
+                    "model": "gpro",
+                    "input": "This is exciting news.",
+                    "voice": "poe",
+                    "style": "happy",
+                    "seed": 1234
                   }
                 }
               }
             }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
           }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "Speech generated",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "X-RateLimit-Limit-Requests": {
+                "$ref": "#/components/headers/RateLimitLimit"
+              },
+              "X-RateLimit-Remaining-Requests": {
+                "$ref": "#/components/headers/RateLimitRemaining"
+              },
+              "X-RateLimit-Reset-Requests": {
+                "$ref": "#/components/headers/RateLimitReset"
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/VoiceGenerationResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Bad request",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Insufficient credits",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Voice not found",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Content policy violation",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "X-RateLimit-Limit-Requests": {
+                "$ref": "#/components/headers/RateLimitLimit"
+              },
+              "X-RateLimit-Remaining-Requests": {
+                "$ref": "#/components/headers/RateLimitRemaining"
+              },
+              "X-RateLimit-Reset-Requests": {
+                "$ref": "#/components/headers/RateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -96,121 +212,558 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
+    "/api/v1/voices": {
+      "get": {
+        "tags": ["Metadata"],
+        "summary": "List available voices",
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "Voices list",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/VoicesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           }
         }
       }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+    },
+    "/api/v1/models": {
+      "get": {
+        "tags": ["Metadata"],
+        "summary": "List available models",
+        "responses": {
+          "200": {
+            "description": "Models list",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
-        },
+        }
+      }
+    },
+    "/api/v1/openapi": {
+      "get": {
+        "tags": ["Metadata"],
+        "summary": "Get OpenAPI schema",
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "OpenAPI document",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/billing": {
+      "get": {
+        "tags": ["Billing"],
+        "summary": "Get billing balance",
+        "description": "Returns current credit balance and your latest purchase/topup transaction.",
+        "responses": {
+          "200": {
+            "description": "Billing balance",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "X-RateLimit-Limit-Requests": {
+                "$ref": "#/components/headers/RateLimitLimit"
+              },
+              "X-RateLimit-Remaining-Requests": {
+                "$ref": "#/components/headers/RateLimitRemaining"
+              },
+              "X-RateLimit-Reset-Requests": {
+                "$ref": "#/components/headers/RateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "headers": {
+              "request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     }
   },
   "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "API Key"
+      }
+    },
+    "headers": {
+      "RequestId": {
+        "description": "Server-generated request identifier for debugging.",
+        "schema": {
+          "type": "string",
+          "example": "req_sv_9f9f6c6dd19f4e4bbf8b7029f2a8f61a"
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
+      "RateLimitLimit": {
+        "schema": {
+          "type": "string",
+          "example": "60"
+        }
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
+      "RateLimitRemaining": {
+        "schema": {
+          "type": "string",
+          "example": "59"
+        }
+      },
+      "RateLimitReset": {
+        "schema": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": ["message", "type", "code"],
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "invalid_request_error",
+                  "authentication_error",
+                  "permission_error",
+                  "not_found_error",
+                  "rate_limit_error",
+                  "server_error"
+                ]
+              },
+              "param": {
+                "type": ["string", "null"]
+              },
+              "code": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "VoiceGenerationRequest": {
+        "type": "object",
+        "required": ["model", "input", "voice"],
+        "properties": {
+          "model": {
+            "type": "string",
+            "enum": ["gpro", "kokoro"]
+          },
+          "input": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "voice": {
+            "type": "string",
+            "minLength": 1
+          },
+          "response_format": {
+            "type": "string",
+            "enum": ["wav", "mp3"]
+          },
+          "style": {
+            "type": "string"
+          },
+          "seed": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "VoiceGenerationResponse": {
+        "type": "object",
+        "required": [
+          "url",
+          "credits_used",
+          "credits_remaining",
+          "cached",
+          "usage"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "credits_used": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "credits_remaining": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "cached": {
+            "type": "boolean"
+          },
+          "usage": {
+            "type": "object",
+            "required": ["input_characters", "model"],
+            "properties": {
+              "input_characters": {
+                "type": "integer"
+              },
+              "model": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "VoiceInfo": {
+        "type": "object",
+        "required": ["id", "name", "language", "model", "formats", "styles"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string",
+            "enum": ["gpro", "kokoro"]
+          },
+          "formats": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["wav", "mp3"]
+            }
+          },
+          "styles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "VoicesResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VoiceInfo"
+            }
+          }
+        }
+      },
+      "ModelInfo": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "max_input_length",
+          "supported_formats",
+          "supported_styles"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": ["gpro", "kokoro"]
+          },
+          "name": {
+            "type": "string"
+          },
+          "max_input_length": {
+            "type": "integer"
+          },
+          "supported_formats": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["wav", "mp3"]
+            }
+          },
+          "supported_styles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ModelsResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModelInfo"
+            }
+          }
+        }
+      },
+      "BillingTransaction": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "amount",
+          "description",
+          "created_at",
+          "reference_id",
+          "subscription_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["purchase", "topup"]
+          },
+          "amount": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reference_id": {
+            "type": ["string", "null"]
+          },
+          "subscription_id": {
+            "type": ["string", "null"]
+          },
+          "metadata": {
+            "type": ["object", "array", "string", "number", "boolean", "null"]
+          }
+        }
+      },
+      "BillingResponse": {
+        "type": "object",
+        "required": [
+          "creditsLeft",
+          "lastUpdated",
+          "userId",
+          "lastBillingTransaction"
+        ],
+        "properties": {
+          "creditsLeft": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "lastUpdated": {
+            "type": ["string", "null"],
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "lastBillingTransaction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BillingTransaction"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
       }
     }
   }

@@ -22,7 +22,10 @@
         "groups": [
           {
             "group": "Getting started",
-            "pages": ["index"]
+            "pages": [
+              "index",
+              "guides/external-api"
+            ]
           },
           {
             "group": "Features",
@@ -30,6 +33,28 @@
               "features/generate",
               "features/voice-cloning",
               "features/voice-call"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/introduction",
+              "api-reference/errors"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api-reference/endpoint/speech",
+              "api-reference/endpoint/billing",
+              "api-reference/endpoint/voices",
+              "api-reference/endpoint/models",
+              "api-reference/endpoint/openapi"
             ]
           }
         ]
