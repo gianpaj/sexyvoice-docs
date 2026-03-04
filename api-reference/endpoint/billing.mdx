@@ -8,7 +8,7 @@ Retrieve your current credit balance and latest billing transaction.
 ## What it returns
 
 - `creditsLeft`: Current available credits.
-- `lastUpdated`: Last credits table update timestamp.
+- `lastUpdated`: Last credits table update timestamp, or `null` if never updated.
 - `userId`: User ID linked to your API key.
 - `lastBillingTransaction`: Most recent `purchase` or `topup` transaction, or
   `null` if none exists yet.
