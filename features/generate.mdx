@@ -25,13 +25,18 @@ Generate lets you turn any text into lifelike audio using AI voices. Choose from
 
 ## Voice Types
 
-| Voice Type | Character Limit | Special Features |
-|------------|-----------------|------------------|
-| **Gemini voices** | 1,000 characters | Add style instructions for tone/emotion |
-| **Standard voices** | 500 characters | Use emotion tags in your text |
+| Voice Type | Character Limit | Output Formats | Special Features |
+|------------|-----------------|----------------|------------------|
+| **Gemini voices** | 1,000 characters | WAV | Add style instructions for tone/emotion |
+| **Grok voices** | 1,000 characters | MP3, WAV | Multi-language support with expressive tags |
+| **Standard voices** | 500 characters | MP3 | Use emotion tags in your text |
 
 <Tip>
 Gemini voices show a text box where you can describe how you want the voice to sound (e.g., "warm and friendly" or "serious and professional").
+</Tip>
+
+<Tip>
+Grok voices support both MP3 and WAV output. They also support expressive tags like `[laugh]`, `[sigh]`, `[pause]`, and wrapper tags like `<whisper>...</whisper>`, `<soft>...</soft>` for fine-grained control over delivery.
 </Tip>
 
 ## Emotion Tags
@@ -57,6 +62,7 @@ Standard voices support emotion tags you can insert directly into your text. Ava
 Credits are calculated based on text length and voice type:
 
 - **Gemini voices**: ~1 credit per token (based on text and audio length)
+- **Grok voices**: 4 credits per 100 characters
 - **Standard voices**: Based on estimated audio duration
 
 You need at least **10 credits** to generate audio. Your remaining credits are shown at the top of the page.

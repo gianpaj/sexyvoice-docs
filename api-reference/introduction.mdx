@@ -38,7 +38,7 @@ curl -X POST 'https://sexyvoice.ai/api/v1/speech' \
   }'
 ```
 
-### TypeScript
+### TypeScript (Gemini)
 
 ```ts
 const response = await fetch('https://sexyvoice.ai/api/v1/speech', {
@@ -60,6 +60,27 @@ const requestId = response.headers.get('request-id');
 const json = await response.json();
 ```
 
+### TypeScript (Grok)
+
+```ts
+const response = await fetch('https://sexyvoice.ai/api/v1/speech', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${process.env.SEXYVOICE_API_KEY}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    model: 'grok',
+    voice: 'eve',
+    input: 'Hello from Grok! [laugh] This sounds great.',
+    response_format: 'wav',
+  }),
+});
+
+const json = await response.json();
+// json.url contains the generated audio URL
+```
+
 ### Check Billing Balance
 
 ```bash
@@ -67,7 +88,7 @@ curl -X GET 'https://sexyvoice.ai/api/v1/billing' \\
   -H 'Authorization: Bearer sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 ```
 
-### Python
+### Python (Gemini)
 
 ```python
 import requests
@@ -90,6 +111,29 @@ response = requests.post(
 
 request_id = response.headers.get('request-id')
 print(request_id, response.status_code, response.json())
+```
+
+### Python (Grok)
+
+```python
+import requests
+
+response = requests.post(
+    'https://sexyvoice.ai/api/v1/speech',
+    headers={
+        'Authorization': f'Bearer {API_KEY}',
+        'Content-Type': 'application/json',
+    },
+    json={
+        'model': 'grok',
+        'voice': 'eve',
+        'input': 'Hello from Grok! <whisper>This is a secret.</whisper>',
+        'response_format': 'mp3',
+    },
+    timeout=30,
+)
+
+print(response.status_code, response.json())
 ```
 
 ## Next Steps

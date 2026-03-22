@@ -35,10 +35,27 @@
                     "style": "happy"
                   }
                 },
+                "grok_mp3": {
+                  "summary": "Grok voice with default MP3 output",
+                  "value": {
+                    "model": "grok",
+                    "input": "Hello from Grok TTS!",
+                    "voice": "eve"
+                  }
+                },
+                "grok_wav": {
+                  "summary": "Grok voice with WAV output",
+                  "value": {
+                    "model": "grok",
+                    "input": "Hola mundo desde Grok",
+                    "voice": "sal",
+                    "response_format": "wav"
+                  }
+                },
                 "minimal": {
                   "summary": "Minimum required parameters",
                   "value": {
-                    "model": "kokoro",
+                    "model": "orpheus",
                     "input": "Test",
                     "voice": "pietro"
                   }
@@ -197,14 +214,14 @@
         "properties": {
           "model": {
             "type": "string",
-            "enum": ["gpro", "kokoro"],
+            "enum": ["gpro", "orpheus", "grok"],
             "description": "The voice model to use"
           },
           "input": {
             "type": "string",
             "minLength": 1,
             "maxLength": 1000,
-            "description": "The text to synthesize (max 1000 chars for gpro, 500 for kokoro)"
+            "description": "The text to synthesize (max 1000 chars for gpro/grok, 500 for orpheus)"
           },
           "voice": {
             "type": "string",
@@ -330,7 +347,7 @@
                 "id": { "type": "string" },
                 "name": { "type": "string" },
                 "language": { "type": "string" },
-                "model": { "type": "string", "enum": ["gpro", "kokoro"] },
+                "model": { "type": "string", "enum": ["gpro", "orpheus", "grok"] },
                 "formats": {
                   "type": "array",
                   "items": { "type": "string", "enum": ["wav", "mp3"] }
@@ -360,7 +377,7 @@
             "items": {
               "type": "object",
               "properties": {
-                "id": { "type": "string", "enum": ["gpro", "kokoro"] },
+                "id": { "type": "string", "enum": ["gpro", "orpheus", "grok"] },
                 "name": { "type": "string" },
                 "max_input_length": {
                   "type": "integer",
