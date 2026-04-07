@@ -23,7 +23,7 @@
                   "value": {
                     "model": "gpro",
                     "input": "Hello, world!",
-                    "voice": "poe"
+                    "voice": "kore"
                   }
                 },
                 "with_style": {
@@ -427,7 +427,10 @@
                 "id": { "type": "string" },
                 "name": { "type": "string" },
                 "language": { "type": "string" },
-                "model": { "type": "string", "enum": ["gpro", "orpheus", "grok"] },
+                "model": {
+                  "type": "string",
+                  "enum": ["gpro", "orpheus", "grok"]
+                },
                 "formats": {
                   "type": "array",
                   "items": { "type": "string", "enum": ["wav", "mp3"] }
