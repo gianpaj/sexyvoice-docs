@@ -24,6 +24,8 @@ Send your API key as a Bearer token:
 
 ### Using Gemini (gpro)
 
+Gemini voices support the freeform `style` parameter and optional `seed`.
+
 ```bash
 curl -X POST 'https://sexyvoice.ai/api/v1/speech' \
   -H 'Authorization: Bearer sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' \
@@ -40,6 +42,8 @@ curl -X POST 'https://sexyvoice.ai/api/v1/speech' \
 ### Using Grok (xAI)
 
 Grok voices support both MP3 (default) and WAV output via `response_format`.
+They ignore the `style` field. Use expressive tags directly in `input`
+instead, such as `[laugh]` or `<whisper>...</whisper>`.
 
 ```bash
 curl -X POST 'https://sexyvoice.ai/api/v1/speech' \
@@ -59,6 +63,16 @@ Successful response includes:
 - `credits_used`
 - `credits_remaining`
 - `usage`
+
+## Voice Capabilities
+
+Use `GET /api/v1/voices` to inspect the available voices for each model.
+
+- `formats` lists the supported output formats for that voice
+- `supports_style` tells you whether the voice accepts the freeform `style`
+  parameter
+- Today, Gemini (`gpro`) voices return `supports_style: true`
+- Grok (`grok`) and standard (`orpheus`) voices return `supports_style: false`
 
 ## 3. Check Balance
 

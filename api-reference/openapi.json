@@ -234,7 +234,7 @@
             "enum": ["wav", "mp3"]
           },
           "style": {
-            "description": "Emotion/style variant (e.g., \"happy\", \"sad\", \"whisper\")",
+            "description": "Freeform style prompt. Supported by Gemini voices; ignored by Grok and Orpheus.",
             "type": "string"
           },
           "seed": {
@@ -352,7 +352,10 @@
                   "type": "array",
                   "items": { "type": "string", "enum": ["wav", "mp3"] }
                 },
-                "styles": { "type": "array", "items": { "type": "string" } }
+                "supports_style": {
+                  "type": "boolean",
+                  "description": "Whether this voice accepts the freeform `style` parameter"
+                }
               },
               "required": [
                 "id",
@@ -360,7 +363,7 @@
                 "language",
                 "model",
                 "formats",
-                "styles"
+                "supports_style"
               ],
               "additionalProperties": false
             }

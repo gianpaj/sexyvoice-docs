@@ -21,6 +21,15 @@ curl -X GET 'https://sexyvoice.ai/api/v1/models' \
 Every response includes a server-generated `request-id` header (format: `req_sv_<hex>`).
 Use it when contacting support or debugging failures.
 
+## Model-Specific Behavior
+
+- Gemini (`gpro`) voices accept the freeform `style` parameter
+- Grok (`grok`) voices support `mp3` and `wav` via `response_format`
+- Grok and Orpheus ignore `style`; use inline expressive tags in the `input`
+  text for Grok instead
+- `GET /api/v1/voices` returns `supports_style` so you can detect this
+  capability per voice
+
 ## Quick Start
 
 ### curl
