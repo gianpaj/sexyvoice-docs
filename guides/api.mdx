@@ -6,6 +6,12 @@ icon: "code"
 
 Use the API when you want to generate speech from your own backend or app.
 
+If you prefer a terminal workflow, use the official CLI:
+
+- Repo: [`gianpaj/sexyvoice-cli`](https://github.com/gianpaj/sexyvoice-cli)
+- Good for browser-based login, listing voices, generating speech, and producing
+  copy-pasteable `curl` commands
+
 ## Prerequisites
 
 - A SexyVoice account
@@ -18,6 +24,12 @@ Send your API key as a Bearer token:
 
 ```bash
 -H 'Authorization: Bearer sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+```
+
+### CLI
+
+```bash
+sexyvoice login
 ```
 
 ## 2. Generate Speech
@@ -64,6 +76,12 @@ Successful response includes:
 - `credits_remaining`
 - `usage`
 
+### CLI
+
+```bash
+sexyvoice tts "Hello from SexyVoice API" --voice kore --model-id gpro -o hello.wav
+```
+
 ## Voice Capabilities
 
 Use `GET /api/v1/voices` to inspect the available voices for each model.
@@ -73,6 +91,15 @@ Use `GET /api/v1/voices` to inspect the available voices for each model.
   parameter
 - Today, Gemini (`gpro`) voices return `supports_style: true`
 - Grok (`grok`) and standard (`orpheus`) voices return `supports_style: false`
+
+### CLI
+
+```bash
+sexyvoice voices
+```
+
+The CLI also lets you skip `--model-id` for `tts` when the selected voice
+uniquely resolves through `GET /api/v1/voices`.
 
 ## 3. Check Balance
 
@@ -105,5 +132,6 @@ Response includes:
 ## Next Steps
 
 - Read full [API Reference](/api-reference/introduction)
+- Try the [SexyVoice CLI](https://github.com/gianpaj/sexyvoice-cli) for local testing
 - Add retries for `429` and transient `500` errors
 - Store `request-id` with your logs for support and tracing
