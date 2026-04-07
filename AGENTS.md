@@ -14,8 +14,21 @@ SexyVoice.ai has three main features:
 
 ## Source Code Reference
 
-- Web app: `/Users/gianpaj/github/gianpaj/sexyvoice.ai`
+- Web app: `/Users/gianpaj/github/gianpaj/sexyvoice`
 - Docs: `/Users/gianpaj/github/gianpaj/sexyvoice-docs`
+
+## OpenAPI Sync
+
+- `api-reference/openapi.json` is a copied snapshot, not the source of truth
+- Do not hand-edit `api-reference/openapi.json` unless the user explicitly asks for a one-off docs-only change
+- Make OpenAPI changes in `/Users/gianpaj/github/gianpaj/sexyvoice-2` first
+- Primary source files for the public API schema:
+  - `lib/api/schemas.ts`
+  - `lib/api/openapi.ts`
+  - `app/api/v1/openapi/route.ts`
+- After updating the app repo, verify the generated schema from the running app at `http://localhost:3000/api/v1/openapi`
+- Only after that, refresh `api-reference/openapi.json` in this docs repo by copying the JSON from the local or production API endpoint
+- When reviewing comments on `api-reference/openapi.json`, first decide whether the real fix belongs upstream in the app repo rather than in the copied file
 
 ## Working Relationship
 
