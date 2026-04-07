@@ -210,42 +210,122 @@
   "components": {
     "schemas": {
       "VoiceGenerationRequest": {
-        "type": "object",
-        "properties": {
-          "model": {
-            "type": "string",
-            "enum": ["gpro", "orpheus", "grok"],
-            "description": "The voice model to use"
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "model": {
+                "type": "string",
+                "enum": ["gpro"],
+                "description": "The voice model to use"
+              },
+              "input": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "description": "The text to synthesize (max 1000 chars for gpro)"
+              },
+              "voice": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Voice name (see GET /api/v1/voices for available voices)"
+              },
+              "response_format": {
+                "description": "Audio format. Gemini voices support wav output.",
+                "type": "string",
+                "enum": ["wav"]
+              },
+              "style": {
+                "description": "Freeform style prompt. Supported by Gemini voices.",
+                "type": "string"
+              },
+              "seed": {
+                "description": "Optional deterministic seed for providers that support it (e.g. Gemini)",
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": ["model", "input", "voice"],
+            "additionalProperties": false
           },
-          "input": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 1000,
-            "description": "The text to synthesize (max 1000 chars for gpro/grok, 500 for orpheus)"
+          {
+            "type": "object",
+            "properties": {
+              "model": {
+                "type": "string",
+                "enum": ["orpheus"],
+                "description": "The voice model to use"
+              },
+              "input": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "description": "The text to synthesize (max 500 chars for orpheus)"
+              },
+              "voice": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Voice name (see GET /api/v1/voices for available voices)"
+              },
+              "response_format": {
+                "description": "Audio format. Orpheus voices support mp3 output.",
+                "type": "string",
+                "enum": ["mp3"]
+              },
+              "style": {
+                "description": "Ignored by Orpheus voices.",
+                "type": "string"
+              },
+              "seed": {
+                "description": "Optional deterministic seed for providers that support it (e.g. Gemini)",
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": ["model", "input", "voice"],
+            "additionalProperties": false
           },
-          "voice": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Voice name (see GET /api/v1/voices for available voices)"
-          },
-          "response_format": {
-            "description": "Audio format. Default depends on model",
-            "type": "string",
-            "enum": ["wav", "mp3"]
-          },
-          "style": {
-            "description": "Freeform style prompt. Supported by Gemini voices; ignored by Grok and Orpheus.",
-            "type": "string"
-          },
-          "seed": {
-            "description": "Optional deterministic seed for providers that support it (e.g. Gemini)",
-            "type": "integer",
-            "minimum": -9007199254740991,
-            "maximum": 9007199254740991
+          {
+            "type": "object",
+            "properties": {
+              "model": {
+                "type": "string",
+                "enum": ["grok"],
+                "description": "The voice model to use"
+              },
+              "input": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "description": "The text to synthesize (max 1000 chars for grok)"
+              },
+              "voice": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Voice name (see GET /api/v1/voices for available voices)"
+              },
+              "response_format": {
+                "description": "Audio format. Grok voices support mp3 and wav output.",
+                "type": "string",
+                "enum": ["wav", "mp3"]
+              },
+              "style": {
+                "description": "Ignored by Grok voices; use inline expressive tags in input instead.",
+                "type": "string"
+              },
+              "seed": {
+                "description": "Optional deterministic seed for providers that support it (e.g. Gemini)",
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": ["model", "input", "voice"],
+            "additionalProperties": false
           }
-        },
-        "required": ["model", "input", "voice"],
-        "additionalProperties": false
+        ]
       },
       "VoiceGenerationResponse": {
         "type": "object",
